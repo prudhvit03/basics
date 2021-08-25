@@ -1,0 +1,994 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name"
+		},
+		"AzureDataLakeStorage3": {
+			"type": "string"
+		},
+		"SqlServer2": {
+			"type": "string"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "demo-container//Dates.csv"
+							},
+							{
+								"name": "Destination",
+								"value": "dbo.dimDate"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"additionalColumns": [
+									{
+										"name": "ID",
+										"value": ""
+									}
+								],
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": false,
+									"modifiedDatetimeStart": "2021-08-25T00:00:00.000Z",
+									"modifiedDatetimeEnd": "2021-08-26T00:00:00.000Z",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings",
+									"skipLineCount": 0
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink"
+							},
+							"enableStaging": false,
+							"enableSkipIncompatibleRow": true,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Id",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "DateKey",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DateKey",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "DateValue",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DateValue",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "YearDayNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YearDayNumber",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "QuarterDayNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QuarterDayNumber",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "MonthDayNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MonthDayNumber",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "YearMonthNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YearMonthNumber",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "MonthDays",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MonthDays",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "YearQuarterNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YearQuarterNumber",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "QuarterDays",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QuarterDays",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "YearNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YearNumber",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "PreviousYear",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "PreviousYear",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "PreviousQuarter",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "PreviousQuarter",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "PreviousMonth",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "PreviousMonth",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "WeekDayNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "WeekDayNumber",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "DayName",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DayName",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "YearWeekNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YearWeekNumber",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "MonthName",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MonthName",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "YearMonth",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "YearMonth",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "WeekFirstDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "WeekFirstDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "WeekLastDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "WeekLastDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "MonthFirstDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MonthFirstDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "MonthLastDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MonthLastDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "QuarterFirstDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QuarterFirstDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "QuarterLastDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "QuarterLastDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "PrevMonthFirstDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "PrevMonthFirstDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "PrevMonthLastDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "PrevMonthLastDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "NextMonthFirstDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NextMonthFirstDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "NextMonthLastDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "NextMonthLastDay",
+											"type": "DateTime",
+											"physicalType": "date"
+										}
+									},
+									{
+										"source": {
+											"name": "DaylightSavings_flag",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "DaylightSavings_flag",
+											"type": "Boolean",
+											"physicalType": "bit"
+										}
+									},
+									{
+										"source": {
+											"name": "MonthDayOccurrence",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "MonthDayOccurrence",
+											"type": "Int64",
+											"physicalType": "bigint"
+										}
+									},
+									{
+										"source": {
+											"name": "CurrentBusDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "CurrentBusDay",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "SalesHoliday",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SalesHoliday",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "SalesHolidayName",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "SalesHolidayName",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "ServiceHoliday",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "ServiceHoliday",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "ServiceHolidayName",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "ServiceHolidayName",
+											"type": "String",
+											"physicalType": "varchar"
+										}
+									},
+									{
+										"source": {
+											"name": "TotSalesBusDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "TotSalesBusDay",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "TotServiceBusDay",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "TotServiceBusDay",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "BSHWeekStartDate(Sat-Fri)",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "BSHWeekStartDate(Sat-Fri)",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "BSHWeekEndDate(Sat-Fri)",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "BSHWeekEndDate(Sat-Fri)",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": false,
+									"treatBooleanAsNumber": true,
+									"dateTimeFormat": "YYYY-DD-MM dd:mm:ss",
+									"dateTimeOffsetFormat": "YYYY-DD-MM dd:mm:ss",
+									"timeSpanFormat": "YYYY-DD-MM dd:mm:ss"
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SqlServerTable2",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/datasets/SqlServerTable2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('AzureDataLakeStorage3')]",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ID": {
+						"type": "int",
+						"defaultValue": 1
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Dates.csv",
+						"fileSystem": "demo-container"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "DateKey",
+						"type": "String"
+					},
+					{
+						"name": "DateValue",
+						"type": "String"
+					},
+					{
+						"name": "YearDayNumber",
+						"type": "String"
+					},
+					{
+						"name": "QuarterDayNumber",
+						"type": "String"
+					},
+					{
+						"name": "MonthDayNumber",
+						"type": "String"
+					},
+					{
+						"name": "YearMonthNumber",
+						"type": "String"
+					},
+					{
+						"name": "MonthDays",
+						"type": "String"
+					},
+					{
+						"name": "YearQuarterNumber",
+						"type": "String"
+					},
+					{
+						"name": "QuarterDays",
+						"type": "String"
+					},
+					{
+						"name": "YearNumber",
+						"type": "String"
+					},
+					{
+						"name": "PreviousYear",
+						"type": "String"
+					},
+					{
+						"name": "PreviousQuarter",
+						"type": "String"
+					},
+					{
+						"name": "PreviousMonth",
+						"type": "String"
+					},
+					{
+						"name": "WeekDayNumber",
+						"type": "String"
+					},
+					{
+						"name": "DayName",
+						"type": "String"
+					},
+					{
+						"name": "YearWeekNumber",
+						"type": "String"
+					},
+					{
+						"name": "MonthName",
+						"type": "String"
+					},
+					{
+						"name": "YearMonth",
+						"type": "String"
+					},
+					{
+						"name": "WeekFirstDay",
+						"type": "String"
+					},
+					{
+						"name": "WeekLastDay",
+						"type": "String"
+					},
+					{
+						"name": "MonthFirstDay",
+						"type": "String"
+					},
+					{
+						"name": "MonthLastDay",
+						"type": "String"
+					},
+					{
+						"name": "QuarterFirstDay",
+						"type": "String"
+					},
+					{
+						"name": "QuarterLastDay",
+						"type": "String"
+					},
+					{
+						"name": "PrevMonthFirstDay",
+						"type": "String"
+					},
+					{
+						"name": "PrevMonthLastDay",
+						"type": "String"
+					},
+					{
+						"name": "NextMonthFirstDay",
+						"type": "String"
+					},
+					{
+						"name": "NextMonthLastDay",
+						"type": "String"
+					},
+					{
+						"name": "DaylightSavings_flag",
+						"type": "String"
+					},
+					{
+						"name": "MonthDayOccurrence",
+						"type": "String"
+					},
+					{
+						"name": "CurrentBusDay",
+						"type": "String"
+					},
+					{
+						"name": "SalesHoliday",
+						"type": "String"
+					},
+					{
+						"name": "SalesHolidayName",
+						"type": "String"
+					},
+					{
+						"name": "ServiceHoliday",
+						"type": "String"
+					},
+					{
+						"name": "ServiceHolidayName",
+						"type": "String"
+					},
+					{
+						"name": "TotSalesBusDay",
+						"type": "String"
+					},
+					{
+						"name": "TotServiceBusDay",
+						"type": "String"
+					},
+					{
+						"name": "BSHWeekStartDate(Sat-Fri)",
+						"type": "String"
+					},
+					{
+						"name": "BSHWeekEndDate(Sat-Fri)",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SqlServerTable2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('SqlServer2')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "Id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateKey",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DateValue",
+						"type": "date"
+					},
+					{
+						"name": "YearDayNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "QuarterDayNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MonthDayNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "YearMonthNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MonthDays",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "YearQuarterNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "QuarterDays",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "YearNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PreviousYear",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PreviousQuarter",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "PreviousMonth",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "WeekDayNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DayName",
+						"type": "varchar"
+					},
+					{
+						"name": "YearWeekNumber",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "MonthName",
+						"type": "varchar"
+					},
+					{
+						"name": "YearMonth",
+						"type": "varchar"
+					},
+					{
+						"name": "WeekFirstDay",
+						"type": "date"
+					},
+					{
+						"name": "WeekLastDay",
+						"type": "date"
+					},
+					{
+						"name": "MonthFirstDay",
+						"type": "date"
+					},
+					{
+						"name": "MonthLastDay",
+						"type": "date"
+					},
+					{
+						"name": "QuarterFirstDay",
+						"type": "date"
+					},
+					{
+						"name": "QuarterLastDay",
+						"type": "date"
+					},
+					{
+						"name": "PrevMonthFirstDay",
+						"type": "date"
+					},
+					{
+						"name": "PrevMonthLastDay",
+						"type": "date"
+					},
+					{
+						"name": "NextMonthFirstDay",
+						"type": "date"
+					},
+					{
+						"name": "NextMonthLastDay",
+						"type": "date"
+					},
+					{
+						"name": "DaylightSavings_flag",
+						"type": "bit"
+					},
+					{
+						"name": "MonthDayOccurrence",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "CurrentBusDay",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SalesHoliday",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SalesHolidayName",
+						"type": "varchar"
+					},
+					{
+						"name": "ServiceHoliday",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ServiceHolidayName",
+						"type": "varchar"
+					},
+					{
+						"name": "TotSalesBusDay",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "TotServiceBusDay",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "BSHWeekStartDate(Sat-Fri)",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "BSHWeekEndDate(Sat-Fri)",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "CreatedDateTime",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ModifiedDateTime",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "dimDate"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
