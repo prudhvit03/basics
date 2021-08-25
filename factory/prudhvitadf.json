@@ -1,0 +1,9 @@
+{
+	"name": "prudhvitadf",
+	"location": "eastus2",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "c370e673-9ec0-4a44-9f34-59dd40a5b6c2",
+		"tenantId": "22908474-ae9c-4d2e-a699-08f00e9575e0"
+	}
+}
